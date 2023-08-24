@@ -3,7 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'dart:math';
 
-import '../constants/globals.dart';
+import '../../data/constants/globals.dart';
 import '../games/gift_grab_game.dart';
 import 'santa_component.dart';
 

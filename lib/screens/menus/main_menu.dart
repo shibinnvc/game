@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../constants/globals.dart';
+import '../../constants/constants.dart';
 import '../../games/gift_grab_game.dart';
 import '../game_play.dart';
 import 'menu_background_widget.dart';
 
 class MainMenu extends StatelessWidget {
-  final GiftGrabGame gameRef;
+  final FruitsCollectorGame gameRef;
   const MainMenu({
     Key? key,
     required this.gameRef,
@@ -21,15 +21,16 @@ class MainMenu extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 50),
               child: Text(
-                'Gift Grab',
+                'Fruit Collector',
                 style: TextStyle(
-                  fontSize: Globals.isTablet ? 100 : 50,
-                ),
+                    color: const Color.fromARGB(255, 0, 0, 0),
+                    fontSize: Constants.isTablet ? 100 : 50,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(
-              width: Globals.isTablet ? 400 : 200,
-              height: Globals.isTablet ? 100 : 50,
+              width: Constants.isTablet ? 400 : 200,
+              height: Constants.isTablet ? 100 : 50,
               child: ElevatedButton(
                 onPressed: () {
                   gameRef.removeMenu(menu: Menu.main);
@@ -38,7 +39,7 @@ class MainMenu extends StatelessWidget {
                 child: Text(
                   'Play',
                   style: TextStyle(
-                    fontSize: Globals.isTablet ? 50 : 25,
+                    fontSize: Constants.isTablet ? 50 : 25,
                   ),
                 ),
               ),

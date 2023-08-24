@@ -5,38 +5,40 @@ import 'package:flame/palette.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import '../components/background_component.dart';
-import '../components/cookie_component.dart';
-import '../components/flame_component.dart';
-import '../components/gift_component.dart';
+import '../components/boost_component.dart';
+import '../components/extra_time_component.dart';
+import '../components/lemon_fruits_component.dart';
 import '../components/ice_component.dart';
-import '../components/santa_component.dart';
-import '../constants/globals.dart';
+import '../components/basket_component.dart';
+import '../constants/constants.dart';
 import '../inputs/joystick.dart';
 import '../screens/game_play.dart';
 import 'dart:math';
 
-class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
-  /// The Santa character who collects the gifts.
-  final SantaComponent _santaComponent = SantaComponent(joystick: joystick);
+class FruitsCollectorGame extends FlameGame
+    with DragCallbacks, HasCollisionDetection {
+  /// The character who collects the gifts.
+  final BasketComponent _characterComponent =
+      BasketComponent(joystick: joystick);
 
   /// Background of snow landscape.
   final BackgroundComponent _backgroundComponent = BackgroundComponent();
 
   /// The first gift to collect.
-  final GiftComponent _giftComponent = GiftComponent();
+  final LemonFruitComponent _lemonComponent = LemonFruitComponent();
 
   /// Flame powerup.
-  final FlameComponent _flameComponent = FlameComponent(
+  final ExtraTimeComponent _extraTimeComponent = ExtraTimeComponent(
     startPosition: Vector2(200, 200),
   );
 
-  /// Number of presents Santa has grabbed.
+  // Number of fruits collected.
   int score = 0;
 
-  /// Total seconds for each game.
-  static int _remainingTime = Globals.gameTimeLimit;
+  // Total seconds for each game.
+  static int _remainingTime = Constants.gameTimeLimit;
 
-  int _flameRemainingTime = Globals.flameTimeLimit;
+  int _extraTimeRemainingTime = Constants.extraTimeLimit;
 
   /// Timer for game countdown.
   late Timer gameTimer;
@@ -53,13 +55,13 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
   late TextComponent flameTimerText;
 
   /// Time when the flame appears.
-  static int _flameTimeAppearance = _getRandomInt(
+  static int _extraTimeAppearance = _getRandomInt(
     min: 10,
     max: _remainingTime,
   );
 
   /// Time when the flame appears.
-  static int _cookieTimeAppearance = _getRandomInt(
+  static int _boostTimeAppearance = _getRandomInt(
     min: 10,
     max: _remainingTime,
   );
@@ -80,12 +82,12 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
           pauseEngine();
           // Display game over menu.
           addMenu(menu: Menu.gameOver);
-        } else if (_remainingTime == _flameTimeAppearance) {
+        } else if (_remainingTime == _extraTimeAppearance) {
           // Display the flame powerup.
-          add(_flameComponent);
-        } else if (_remainingTime == _cookieTimeAppearance) {
+          add(_extraTimeComponent);
+        } else if (_remainingTime == _boostTimeAppearance) {
           // Display the cookie powerup.
-          add(CookieComponent());
+          add(BoostComponent());
         }
 
         // Decrement time by one second.
@@ -97,11 +99,11 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
       1,
       repeat: true,
       onTick: () {
-        if (_flameRemainingTime == 0) {
-          _santaComponent.unflameSanta();
+        if (_extraTimeRemainingTime == 0) {
+          _characterComponent.unflameSanta();
           flameTimerText.removeFromParent();
         } else {
-          _flameRemainingTime -= 1;
+          _extraTimeRemainingTime -= 1;
         }
       },
     );
@@ -109,29 +111,29 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
     // Preload audio files.
     await FlameAudio.audioCache.loadAll(
       [
-        Globals.freezeSound,
-        Globals.itemGrabSound,
-        Globals.flameSound,
+        Constants.freezeSound,
+        Constants.itemGrabSound,
+        Constants.flameSound,
       ],
     );
 
-    // Add background.
+    // Add background component here.
     add(_backgroundComponent);
 
     // Add initial gift.
-    add(_giftComponent);
+    add(_lemonComponent);
 
     // Add ice blocks.
-    add(IceComponent(startPosition: Vector2(200, 200)));
-    add(IceComponent(startPosition: Vector2(size.x - 200, size.y - 200)));
+    add(BombComponent(startPosition: Vector2(200, 200)));
+    add(BombComponent(startPosition: Vector2(size.x - 200, size.y - 200)));
 
-    // Add santa.
-    add(_santaComponent);
+    // Add character.
+    add(_characterComponent);
 
     // Add joystick.
     add(joystick);
 
-    // Add ScreenHitBox for boundries for ice blocks.
+    // Add ScreenHitBox for boundries for bombs.
     add(ScreenHitbox());
 
     // Configure TextComponent
@@ -142,7 +144,7 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
       textRenderer: TextPaint(
         style: TextStyle(
           color: BasicPalette.white.color,
-          fontSize: Globals.isTablet ? 50 : 25,
+          fontSize: Constants.isTablet ? 50 : 25,
         ),
       ),
     );
@@ -152,13 +154,13 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
 
     // Configure TextComponent
     _timerText = TextComponent(
-      text: 'Time: $score',
+      text: 'Time: $_remainingTime',
       position: Vector2(size.x - 40, 50),
       anchor: Anchor.topRight,
       textRenderer: TextPaint(
         style: TextStyle(
           color: BasicPalette.white.color,
-          fontSize: Globals.isTablet ? 50 : 25,
+          fontSize: Constants.isTablet ? 50 : 25,
         ),
       ),
     );
@@ -168,13 +170,13 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
 
     // Configure TextComponent
     flameTimerText = TextComponent(
-      text: 'Flame Time: $_flameRemainingTime',
+      text: 'Flame Time: $_extraTimeRemainingTime',
       position: Vector2(size.x - 40, size.y - 100),
       anchor: Anchor.topRight,
       textRenderer: TextPaint(
         style: TextStyle(
           color: BasicPalette.black.color,
-          fontSize: Globals.isTablet ? 50 : 25,
+          fontSize: Constants.isTablet ? 50 : 25,
         ),
       ),
     );
@@ -188,9 +190,9 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
 
     gameTimer.update(dt);
 
-    if (_santaComponent.isFlamed) {
+    if (_characterComponent.isFlamed) {
       flameTimer.update(dt);
-      flameTimerText.text = 'Flame Time: $_flameRemainingTime';
+      flameTimerText.text = 'Flame Time: $_extraTimeRemainingTime';
     }
 
     _scoreText.text = 'Score: $score';
@@ -203,21 +205,21 @@ class GiftGrabGame extends FlameGame with DragCallbacks, HasCollisionDetection {
     score = 0;
 
     // Timers
-    _remainingTime = Globals.gameTimeLimit;
-    _flameRemainingTime = Globals.flameTimeLimit;
+    _remainingTime = Constants.gameTimeLimit;
+    _extraTimeRemainingTime = Constants.extraTimeLimit;
 
     // Time Appearences
-    _flameTimeAppearance = _getRandomInt(
+    _extraTimeAppearance = _getRandomInt(
       min: 10,
       max: _remainingTime,
     );
-    _cookieTimeAppearance = _getRandomInt(
+    _boostTimeAppearance = _getRandomInt(
       min: 10,
       max: _remainingTime,
     );
 
     // Sprites
-    _flameComponent.removeFromParent();
+    _extraTimeComponent.removeFromParent();
 
     // Texts
     flameTimerText.removeFromParent();

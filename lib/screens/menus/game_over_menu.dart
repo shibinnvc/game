@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../constants/globals.dart';
+import '../../constants/constants.dart';
 import '../../games/gift_grab_game.dart';
 import '../game_play.dart';
 import 'menu_background_widget.dart';
 
 class GameOverMenu extends StatelessWidget {
-  final GiftGrabGame gameRef;
+  final FruitsCollectorGame gameRef;
   const GameOverMenu({Key? key, required this.gameRef}) : super(key: key);
 
   @override
@@ -20,7 +20,7 @@ class GameOverMenu extends StatelessWidget {
               child: Text(
                 'Game Over',
                 style: TextStyle(
-                  fontSize: Globals.isTablet ? 100 : 50,
+                  fontSize: Constants.isTablet ? 100 : 50,
                 ),
               ),
             ),
@@ -29,13 +29,13 @@ class GameOverMenu extends StatelessWidget {
               child: Text(
                 'Score: ${gameRef.score}',
                 style: TextStyle(
-                  fontSize: Globals.isTablet ? 100 : 50,
+                  fontSize: Constants.isTablet ? 100 : 50,
                 ),
               ),
             ),
             SizedBox(
-              width: Globals.isTablet ? 400 : 200,
-              height: Globals.isTablet ? 100 : 50,
+              width: Constants.isTablet ? 400 : 200,
+              height: Constants.isTablet ? 100 : 50,
               child: ElevatedButton(
                 onPressed: () {
                   gameRef.removeMenu(menu: Menu.gameOver);
@@ -45,7 +45,7 @@ class GameOverMenu extends StatelessWidget {
                 child: Text(
                   'Play Again',
                   style: TextStyle(
-                    fontSize: Globals.isTablet ? 50 : 25,
+                    fontSize: Constants.isTablet ? 50 : 25,
                   ),
                 ),
               ),
@@ -54,8 +54,8 @@ class GameOverMenu extends StatelessWidget {
               height: 20,
             ),
             SizedBox(
-              width: Globals.isTablet ? 400 : 200,
-              height: Globals.isTablet ? 100 : 50,
+              width: Constants.isTablet ? 400 : 200,
+              height: Constants.isTablet ? 100 : 50,
               child: ElevatedButton(
                 onPressed: () {
                   gameRef.removeMenu(menu: Menu.gameOver);
@@ -65,7 +65,7 @@ class GameOverMenu extends StatelessWidget {
                 child: Text(
                   'Main Menu',
                   style: TextStyle(
-                    fontSize: Globals.isTablet ? 50 : 25,
+                    fontSize: Constants.isTablet ? 50 : 25,
                   ),
                 ),
               ),

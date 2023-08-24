@@ -4,11 +4,11 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'dart:math' as math;
 
-import '../constants/globals.dart';
+import '../../data/constants/globals.dart';
 import '../games/gift_grab_game.dart';
 import 'santa_component.dart';
 
-class CookieComponent extends SpriteComponent
+class FlameComponent extends SpriteComponent
     with HasGameRef<GiftGrabGame>, CollisionCallbacks {
   /// Height of the sprite.
   final double _spriteHeight = Globals.isTablet ? 160.0 : 80.0;
@@ -17,20 +17,22 @@ class CookieComponent extends SpriteComponent
   late Vector2 _velocity;
 
   /// Speed of the gift.
-  double speed = Globals.isTablet ? 600 : 300;
+  double speed = Globals.isTablet ? 300 : 150;
 
   /// Angle or the gift on bounce back.
   final double degree = math.pi / 180;
 
-  CookieComponent();
+  final Vector2 startPosition;
+
+  FlameComponent({required this.startPosition});
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite(Globals.cookieSprite);
+    sprite = await gameRef.loadSprite(Globals.flameSprite);
 
-    position = Vector2(200, 200);
+    position = startPosition;
 
     final double spawnAngle = _getSpawnAngle();
 
@@ -40,7 +42,7 @@ class CookieComponent extends SpriteComponent
     _velocity = Vector2(vx, vy);
 
     // Set dimensions of santa sprite.
-    width = _spriteHeight;
+    width = _spriteHeight * 0.8;
     height = _spriteHeight;
 
     // Set anchor of component.

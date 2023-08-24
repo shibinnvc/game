@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../constants/globals.dart';
+import '../../constants/constants.dart';
 
 class MenuBackgroundWidget extends StatelessWidget {
   const MenuBackgroundWidget({
@@ -15,7 +15,7 @@ class MenuBackgroundWidget extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/${Globals.backgroundSprite}"),
+            image: AssetImage("assets/images/${Constants.backgroundSprite}"),
             fit: BoxFit.cover,
           ),
         ),
