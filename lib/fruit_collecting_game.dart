@@ -151,7 +151,7 @@ class FruitsCollectorGame extends FlameGame
 
     gameTimer.update(dt);
 
-    if (_characterComponent.isFlamed) {
+    if (_characterComponent.isExtra) {
       extraTimer.update(dt);
       extraTimerText.text = 'Flame Time: $_extraTimeRemainingTime';
     }

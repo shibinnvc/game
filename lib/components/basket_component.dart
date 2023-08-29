@@ -28,7 +28,7 @@ class BasketComponent extends SpriteGroupComponent<MovementState>
 
   bool isFrozen = false;
 
-  bool isFlamed = false;
+  bool isExtra = false;
   final Timer _frozenCountdown = Timer(4);
   final Timer _boostCountdown = Timer(4);
 
@@ -51,17 +51,12 @@ class BasketComponent extends SpriteGroupComponent<MovementState>
     _leftBound = 0 + 45;
     _upBound = 0 + 55;
     _downBound = gameRef.size.y - 55;
-
-    // Set position of component to center of screen.
     position = gameRef.size;
-    // Set dimensions of basket.
     width = _basketHeight * 1.42;
     height = _basketHeight;
 
-    // Set anchor of component.
     anchor = Anchor.bottomCenter;
 
-    // Default current state to idle.
     current = MovementState.idle;
 
     add(CircleHitbox()..radius = 1);
@@ -71,9 +66,7 @@ class BasketComponent extends SpriteGroupComponent<MovementState>
   void update(double dt) {
     super.update(dt);
 
-    // If Basket is not frozen, update position.
     if (!isFrozen) {
-      // If joystick is idle, set state to idle.
       if (joystick.direction == JoystickDirection.idle) {
         current = MovementState.idle;
         return;
@@ -93,7 +86,6 @@ class BasketComponent extends SpriteGroupComponent<MovementState>
         y = _upBound + 1;
       }
 
-      // Determines if the component is moving left currently.
       bool moveLeft = joystick.relativeDelta[0] < 0;
 
       if (moveLeft) {
@@ -107,7 +99,6 @@ class BasketComponent extends SpriteGroupComponent<MovementState>
         _resetBasketSpeed();
       }
 
-      // Update position here.
       position.add(joystick.relativeDelta * _speed * dt);
     } else {
       _frozenCountdown.update(dt);
@@ -121,7 +112,7 @@ class BasketComponent extends SpriteGroupComponent<MovementState>
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is BombComponent) {
-      if (!isFlamed) {
+      if (!isExtra) {
         _freezeBasket();
       }
     }
@@ -135,23 +126,19 @@ class BasketComponent extends SpriteGroupComponent<MovementState>
   }
 
   void flameBasket() {
-    // Check if already frozen.
     if (!isFrozen) {
-      isFlamed = true;
+      isExtra = true;
       FlameAudio.play(Constants.boostSound);
-      // gameRef.add(gameRef.flameTimerText);
-      // gameRef.flameTimer.start();
     }
   }
 
   void unflameBasket() {
-    isFlamed = false;
+    isExtra = false;
   }
 
   void _increaseBasketSpeed() {
     FlameAudio.play(Constants.itemPickSound);
     _speed *= 2;
-    // Start the speed countdown.
     _boostCountdown.start();
   }
 
