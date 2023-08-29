@@ -15,7 +15,7 @@ class MenuBackgroundWidget extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/${Constants.backgroundSprite}"),
+            image: AssetImage("assets/images/${Constants.background}"),
             fit: BoxFit.cover,
           ),
         ),

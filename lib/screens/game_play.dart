@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
-import '../constants/constants.dart';
-import '../games/gift_grab_game.dart';
+import '../fruit_collecting_game.dart';
 import 'menus/game_over_menu.dart';
 import 'menus/main_menu.dart';
 
@@ -14,8 +13,6 @@ class GamePlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Constants.isTablet = MediaQuery.of(context).size.width > 600;
-
     return GameWidget(
       initialActiveOverlays: [Menu.main.name],
       game: _giftGrabGame,

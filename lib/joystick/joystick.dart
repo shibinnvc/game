@@ -1,17 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flame/palette.dart';
 import 'package:flutter/material.dart';
-import '../constants/constants.dart';
 
 final JoystickComponent joystick = JoystickComponent(
-  knob: RectangleComponent(
-    size: Vector2(50, 50),
-    paint: BasicPalette.white
-        //.withAlpha(200)
-        .paint(),
+  knob: CircleComponent(
+    radius: 30,
+    paint: BasicPalette.white.paint(),
   ),
   background: CircleComponent(
-    radius: Constants.isTablet ? 100 : 50,
+    radius: 50,
     paint: BasicPalette.white.withAlpha(100).paint(),
   ),
   margin: const EdgeInsets.only(left: 40, bottom: 40),

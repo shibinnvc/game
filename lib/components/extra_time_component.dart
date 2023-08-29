@@ -1,25 +1,16 @@
-import 'dart:ui';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:game/utils/angles.dart';
 import 'dart:math' as math;
-
 import '../constants/constants.dart';
-import '../games/gift_grab_game.dart';
+import '../fruit_collecting_game.dart';
 import 'basket_component.dart';
 
 class ExtraTimeComponent extends SpriteComponent
     with HasGameRef<FruitsCollectorGame>, CollisionCallbacks {
-  /// Height of the sprite.
-  final double _spriteHeight = Constants.isTablet ? 160.0 : 80.0;
-
-  /// Speed and direction of gift.
+  final double _clockHeight = 80.0;
   late Vector2 _velocity;
-
-  /// Speed of the gift.
-  double speed = Constants.isTablet ? 300 : 150;
-
-  /// Angle or the gift on bounce back.
+  double speed = 150;
   final double degree = math.pi / 180;
 
   final Vector2 startPosition;
@@ -30,22 +21,16 @@ class ExtraTimeComponent extends SpriteComponent
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite(Constants.extraTimeSprite);
+    sprite = await gameRef.loadSprite(Constants.extraTime);
 
     position = startPosition;
 
-    final double spawnAngle = _getSpawnAngle();
-
-    final double vx = math.cos(spawnAngle * degree) * speed;
-    final double vy = math.sin(spawnAngle * degree) * speed;
+    final double vx = math.cos(Angles.getAngle() * degree) * speed;
+    final double vy = math.sin(Angles.getAngle() * degree) * speed;
 
     _velocity = Vector2(vx, vy);
-
-    // Set dimensions of santa sprite.
-    width = _spriteHeight * 0.8;
-    height = _spriteHeight;
-
-    // Set anchor of component.
+    width = _clockHeight * 0.8;
+    height = _clockHeight;
     anchor = Anchor.center;
 
     add(CircleHitbox()..radius = 1);
@@ -54,7 +39,6 @@ class ExtraTimeComponent extends SpriteComponent
   @override
   void update(double dt) {
     super.update(dt);
-
     position += _velocity * dt;
   }
 
@@ -64,23 +48,23 @@ class ExtraTimeComponent extends SpriteComponent
 
     if (other is ScreenHitbox) {
       final Vector2 collisionPoint = intersectionPoints.first;
-
-      // Left Side Collision
+      // Collision (Left, Right, Top, Bottom)
+      // Left
       if (collisionPoint.x == 0) {
         _velocity.x = -_velocity.x;
         _velocity.y = _velocity.y;
       }
-      // Right Side Collision
+      // Right
       if (collisionPoint.x == gameRef.size.x) {
         _velocity.x = -_velocity.x;
         _velocity.y = _velocity.y;
       }
-      // Top Side Collision
+      // Top
       if (collisionPoint.y == 0) {
         _velocity.x = _velocity.x;
         _velocity.y = -_velocity.y;
       }
-      // Bottom Side Collision
+      // Bottom
       if (collisionPoint.y == gameRef.size.y) {
         _velocity.x = _velocity.x;
         _velocity.y = -_velocity.y;
@@ -88,14 +72,9 @@ class ExtraTimeComponent extends SpriteComponent
     }
 
     if (other is BasketComponent) {
+      //shibin
       removeFromParent();
+      gameRef.remainingTime += 6;
     }
-  }
-
-  double _getSpawnAngle() {
-    final random = math.Random().nextDouble();
-    final spawnAngle = lerpDouble(0, 360, random)!;
-
-    return spawnAngle;
   }
 }

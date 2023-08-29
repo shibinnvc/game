@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import '../constants/constants.dart';
-import '../games/gift_grab_game.dart';
+import '../fruit_collecting_game.dart';
 
 class BackgroundComponent extends SpriteComponent
     with HasGameRef<FruitsCollectorGame> {
@@ -9,7 +9,7 @@ class BackgroundComponent extends SpriteComponent
     //This function will load the background image.
     await super.onLoad();
     //give the background image here.
-    sprite = await gameRef.loadSprite(Constants.backgroundSprite);
+    sprite = await gameRef.loadSprite(Constants.background);
     //we can handle background image size here.
     size = gameRef.size;
   }

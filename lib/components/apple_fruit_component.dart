@@ -1,52 +1,40 @@
-import 'dart:ui';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:game/utils/angles.dart';
+import '../constants/constants.dart';
+import '../fruit_collecting_game.dart';
+import 'basket_component.dart';
 import 'dart:math' as math;
 
-import '../constants/constants.dart';
-import '../games/gift_grab_game.dart';
-
-class BombComponent extends SpriteComponent
+class AppleFruitComponent extends SpriteComponent
     with HasGameRef<FruitsCollectorGame>, CollisionCallbacks {
-  /// Height of the sprite.
-  final double _spriteHeight = Constants.isTablet ? 200.0 : 100.0;
-
-  // Speed and direction of bomb.
+  /// Height of the apple.
+  final double _appleHeight = 60.0;
   late Vector2 _velocity;
-
-  // Speed of the bomb.
-  double speed = Constants.isTablet ? 300 : 150;
-
-  // Angle of the bomb on bounce back.
+  double speed = 400;
   final double degree = math.pi / 180;
 
-  final Vector2 startPosition;
-
-  BombComponent({required this.startPosition});
+  AppleFruitComponent();
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
 
-    sprite = await gameRef.loadSprite(Constants.iceSprite);
+    sprite = await gameRef.loadSprite(Constants.apple);
 
-    position = startPosition;
+    position = Vector2(200, 200);
 
-    final double spawnAngle = _getSpawnAngle();
-
-    final double vx = math.cos(spawnAngle * degree) * speed;
-    final double vy = math.sin(spawnAngle * degree) * speed;
+    final double vx = math.cos(Angles.getAngle() * degree) * speed;
+    final double vy = math.sin(Angles.getAngle() * degree) * speed;
 
     _velocity = Vector2(vx, vy);
 
-    // Set dimensions of santa sprite.
-    width = _spriteHeight;
-    height = _spriteHeight;
+    // Set dimensions of apple sprite.
+    width = _appleHeight;
+    height = _appleHeight;
 
-    // Set anchor of component.
     anchor = Anchor.center;
-
     add(CircleHitbox()..radius = 1);
   }
 
@@ -62,38 +50,32 @@ class BombComponent extends SpriteComponent
     super.onCollision(intersectionPoints, other);
 
     if (other is ScreenHitbox) {
-      //screenSide
       final Vector2 collisionPoint = intersectionPoints.first;
-
-      // Left Side Collision
+      //Side Collisions(Left, Right,Top,Bottom)
       if (collisionPoint.x == 0) {
         _velocity.x = -_velocity.x;
         _velocity.y = _velocity.y;
       }
-      // Right Side Collision
+
       if (collisionPoint.x == gameRef.size.x) {
         _velocity.x = -_velocity.x;
         _velocity.y = _velocity.y;
       }
-      // Top Side Collision
+
       if (collisionPoint.y == 0) {
         _velocity.x = _velocity.x;
         _velocity.y = -_velocity.y;
       }
-      // Bottom Side Collision
+
       if (collisionPoint.y == gameRef.size.y) {
         _velocity.x = _velocity.x;
         _velocity.y = -_velocity.y;
       }
     }
-  }
-
-//here we change the angle of bomb when it hit the wall
-  double _getSpawnAngle() {
-    final random = math.Random().nextDouble();
-    //This will return a random number between 0 to 360
-    final spawnAngle = lerpDouble(0, 360, random)!;
-
-    return spawnAngle;
+    if (other is BasketComponent) {
+      FlameAudio.play(Constants.itemPickSound);
+      removeFromParent();
+      gameRef.score += 2;
+    }
   }
 }

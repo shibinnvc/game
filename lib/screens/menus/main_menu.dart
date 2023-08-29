@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../constants/constants.dart';
-import '../../games/gift_grab_game.dart';
+import '../../fruit_collecting_game.dart';
 import '../game_play.dart';
 import 'menu_background_widget.dart';
 
@@ -18,28 +17,28 @@ class MainMenu extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 50),
               child: Text(
                 'Fruit Collector',
                 style: TextStyle(
-                    color: const Color.fromARGB(255, 0, 0, 0),
-                    fontSize: Constants.isTablet ? 100 : 50,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    fontSize: 50,
                     fontWeight: FontWeight.bold),
               ),
             ),
             SizedBox(
-              width: Constants.isTablet ? 400 : 200,
-              height: Constants.isTablet ? 100 : 50,
+              width: 200,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   gameRef.removeMenu(menu: Menu.main);
                   gameRef.resumeEngine();
                 },
-                child: Text(
-                  'Play',
+                child: const Text(
+                  'Start',
                   style: TextStyle(
-                    fontSize: Constants.isTablet ? 50 : 25,
+                    fontSize: 25,
                   ),
                 ),
               ),

@@ -4,37 +4,45 @@ import 'package:game/utils/angles.dart';
 import 'dart:math' as math;
 import '../constants/constants.dart';
 import '../fruit_collecting_game.dart';
-import 'basket_component.dart';
 
-class BoostComponent extends SpriteComponent
+class BombComponent extends SpriteComponent
     with HasGameRef<FruitsCollectorGame>, CollisionCallbacks {
-  final double _flameHeight = 80.0;
+  final Vector2 startPosition;
+  BombComponent({required this.startPosition});
+  final double _bombHeight = 100.0;
 
+  // Speed and direction of bomb.
   late Vector2 _velocity;
+  double speed = 150;
 
-  double speed = 300;
-
+  // Angle of the bomb on bounce back.
   final double degree = math.pi / 180;
-
-  BoostComponent();
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    sprite = await gameRef.loadSprite(Constants.ligthing);
-    position = Vector2(200, 200);
-    final double vx = math.cos(Angles.getAngle() * degree) * speed;
-    final double vy = math.sin(Angles.getAngle() * degree) * speed;
+
+    sprite = await gameRef.loadSprite(Constants.bomb);
+
+    position = startPosition;
+
+    final double spawnAngle = Angles.getAngle();
+
+    final double vx = math.cos(spawnAngle * degree) * speed;
+    final double vy = math.sin(spawnAngle * degree) * speed;
+
     _velocity = Vector2(vx, vy);
-    width = _flameHeight;
-    height = _flameHeight;
+    width = _bombHeight;
+    height = _bombHeight;
     anchor = Anchor.center;
+
     add(CircleHitbox()..radius = 1);
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+
     position += _velocity * dt;
   }
 
@@ -43,9 +51,9 @@ class BoostComponent extends SpriteComponent
     super.onCollision(intersectionPoints, other);
 
     if (other is ScreenHitbox) {
+      //screenSide
       final Vector2 collisionPoint = intersectionPoints.first;
-
-      //Collision (Right,Left,Top,Bottom) side collisions
+      // Collision (Left, Right, Top, Bottom)
       // Left
       if (collisionPoint.x == 0) {
         _velocity.x = -_velocity.x;
@@ -66,10 +74,6 @@ class BoostComponent extends SpriteComponent
         _velocity.x = _velocity.x;
         _velocity.y = -_velocity.y;
       }
-    }
-
-    if (other is BasketComponent) {
-      removeFromParent();
     }
   }
 }

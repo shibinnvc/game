@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../constants/constants.dart';
-import '../../games/gift_grab_game.dart';
+import '../../fruit_collecting_game.dart';
 import '../game_play.dart';
 import 'menu_background_widget.dart';
 
@@ -15,12 +14,12 @@ class GameOverMenu extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 50),
               child: Text(
-                'Game Over',
+                'Finished',
                 style: TextStyle(
-                  fontSize: Constants.isTablet ? 100 : 50,
+                  fontSize: 50,
                 ),
               ),
             ),
@@ -28,24 +27,24 @@ class GameOverMenu extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 50),
               child: Text(
                 'Score: ${gameRef.score}',
-                style: TextStyle(
-                  fontSize: Constants.isTablet ? 100 : 50,
+                style: const TextStyle(
+                  fontSize: 50,
                 ),
               ),
             ),
             SizedBox(
-              width: Constants.isTablet ? 400 : 200,
-              height: Constants.isTablet ? 100 : 50,
+              width: 200,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   gameRef.removeMenu(menu: Menu.gameOver);
                   gameRef.reset();
                   gameRef.resumeEngine();
                 },
-                child: Text(
+                child: const Text(
                   'Play Again',
                   style: TextStyle(
-                    fontSize: Constants.isTablet ? 50 : 25,
+                    fontSize: 25,
                   ),
                 ),
               ),
@@ -54,18 +53,18 @@ class GameOverMenu extends StatelessWidget {
               height: 20,
             ),
             SizedBox(
-              width: Constants.isTablet ? 400 : 200,
-              height: Constants.isTablet ? 100 : 50,
+              width: 200,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   gameRef.removeMenu(menu: Menu.gameOver);
                   gameRef.reset();
                   gameRef.addMenu(menu: Menu.main);
                 },
-                child: Text(
+                child: const Text(
                   'Main Menu',
                   style: TextStyle(
-                    fontSize: Constants.isTablet ? 50 : 25,
+                    fontSize: 25,
                   ),
                 ),
               ),
